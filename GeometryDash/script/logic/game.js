@@ -63,6 +63,12 @@ class Game {
             const obstacle = this.obstacles[i];
             obstacle.update(this.gameSpeed);
             obstacle.draw(this.ctx);
+
+            // Controllo se l'ostacolo è stato superato con successo
+            if (!obstacle.passed && obstacle.x + obstacle.width < this.player.x) {
+                obstacle.passed = true;
+                this.score++; // Incremento dello score quando l'ostacolo viene superato
+            }
         }
 
         if (this.checkCollision()) {
@@ -107,6 +113,7 @@ class Game {
         this.ctx.fillStyle = 'black';
         this.ctx.font = '40px Arial';
         this.ctx.fillText('Game Over', this.canvas.width / 2 - 100, this.canvas.height / 2);
+        this.ctx.fillText('Score: ' + this.score, this.canvas.width / 2 - 80, this.canvas.height / 2 + 60);
     }
 }
 
