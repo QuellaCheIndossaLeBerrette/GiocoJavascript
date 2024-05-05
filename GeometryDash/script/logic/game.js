@@ -2,6 +2,9 @@
 import Player from "../models/player.js";
 // Importa la classe Obstacle dal file "obstacle.js"
 import Obstacle from "../models/obstacle.js";
+// importa la classe Sound dal file "sound.js"
+import Sound from "../models/sound.js";
+
 
 class Game {
     // Costruttore della classe Game
@@ -25,6 +28,10 @@ class Game {
         this.obstacleSpawnInterval = 2000;
         // Memorizza il tempo dell'ultimo spawn di ostacoli
         this.lastObstacleSpawnTime = 0;
+        // Inizializza il suono del salto
+        this.jumpSound = new Sound("assets/audio/jump_sound.mp3");
+        // Inizializza il suono della collisione
+        this.collisionSound = new Sound("assets/audio/collision_sound.mp3");
     }
 
     // Inizializza il gioco
@@ -66,17 +73,18 @@ class Game {
         this.obstacles.push(obstacle);
     }
 
-    // Gestisce l'evento di salto del giocatore
+    // Gestisce l'evento di salto del giocatore e il suono
     jump()
     {
         this.player.jump();
+        this.jumpSound.play();
     }
 
     // Aggiorna lo stato del gioco
     update()
     {
         // Se il gioco è finito, interrompe l'aggiornamento
-        if (this.isGameOver) return;
+        if(this.isGameOver) return;
 
         // Pulisce il canvas
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -107,7 +115,8 @@ class Game {
         // Controlla se c'è una collisione tra il giocatore e gli ostacoli
         if (this.checkCollision())
         {
-            // Se c'è una collisione, termina il gioco
+            // Se c'è una collisione, aggiunge il suono della collisione e termina il gioco
+            this.collisionSound.play();
             this.gameOver();
             return;
         }
@@ -127,6 +136,7 @@ class Game {
         if(key == ' ')
         {
             this.player.jump();
+            this.jumpSound.play();
         }
     }
 

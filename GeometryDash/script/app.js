@@ -26,17 +26,8 @@ function keyDownHandler(event)
     g.keyPressedHandler(event.key.toLowerCase());
 }
 
-// Funzione per gestire gli eventi di rilascio dei tasti
-function keyUpHandler(event)
-{
-    // Chiama il gestore di rilascio dei tasti nella classe Game, convertendo il tasto in lettere minuscole
-    g.keyReleasedHandler(event.key.toLowerCase());
-}
-
 // La funzione runGame viene eseguita quando l'intera finestra HTML è stata caricata
 window.onload = runGame;
 
 // Aggiunge un listener per l'evento di pressione dei tasti
 window.addEventListener("keydown", keyDownHandler);
-// Aggiunge un listener per l'evento di rilascio dei tasti
-window.addEventListener("keyup", keyUpHandler);
