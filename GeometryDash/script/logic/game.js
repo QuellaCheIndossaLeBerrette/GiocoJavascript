@@ -23,6 +23,15 @@ class Game {
         this.update();
     }
 
+    draw()
+    {
+        this.player.draw(this.ctx);
+        for(let i = 0; i < this.obstacles.length; i++)
+        {
+            this.obstacles[i].draw(this.ctx);
+        }
+    }
+
     startObstacleSpawn()
     {
         setInterval(() => {
@@ -71,17 +80,9 @@ class Game {
 
     keyPressedHandler(key)
     {
-        if(key == 'Space')
+        if(key == ' ')
         {
             this.player.jump();
-        }
-    }
-
-    keyReleasedHandler(key)
-    {
-        if(key == 'Space')
-        {
-            this.player.y = 0;
         }
     }
 
@@ -90,22 +91,10 @@ class Game {
         for (let i = 0; i < this.obstacles.length; i++)
         {
             const obstacle = this.obstacles[i];
-            if (
-                this.player.x < obstacle.x + obstacle.width &&
-                this.player.x + this.player.width > obstacle.x &&
-                this.player.y < obstacle.y + obstacle.height &&
-                this.player.y + this.player.height > obstacle.y
-            )
+            let collision=obstacle.checkCollision(this.player);
+            if(collision)
             {
-                if (this.player.y < obstacle.y)
-                {
-                    // Il player è sopra l'ostacolo
-                    return false; // Non c'è collisione
-                } else
-                {
-                    // Il player ha colpito l'ostacolo
-                    return true; // C'è collisione
-                }
+                return true;
             }
         }
         return false;

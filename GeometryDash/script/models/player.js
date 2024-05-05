@@ -9,34 +9,42 @@ class Player
         this.velocityY = 0;
         this.gravity = 0.5;
         this.color = 'yellow';
-        this.jumping = false;
+        this.xbase = x;
+        this.salto = 10;
+        this.jumpHeight = 100;
+        this.jumpDuration = 500;
     }
 
     jump()
     {
-        if (!this.jumping)
+        if(!this.jumping)
         {
-            this.velocityY = - 10; // Usa la forza del salto per impostare la velocità verticale
             this.jumping = true;
+            const startTime = performance.now();
+            const startHeight = this.y;
+
+            const animateJump = (currentTime) => {
+                const elapsedTime = currentTime - startTime;
+                const progress = Math.min(elapsedTime / this.jumpDuration, 1);
+                this.y = startHeight - this.jumpHeight * Math.sin(progress * Math.PI);
+                if(progress < 1)
+                {
+                    requestAnimationFrame(animateJump);
+                } else {
+                    this.jumping = false;
+                    this.y = startHeight;
+                }
+            };
+            requestAnimationFrame(animateJump);
         }
     }
 
-    // canvasHeight: parametro usato per rappresentare l'altezza del canvas
-    update(canvasHeight)
+    update()
     {
-        //this.velocityY += this.gravity; // Aggiungo la gravità
-        this.y += this.velocityY;
-    
-        // Controllo: evita che il giocatore scenda sotto il bordo inferiore del canvas
-        if (this.y >= canvasHeight - this.height)
-        {
-            this.y = canvasHeight - this.height;
-            this.jumping = false; // Il giocatore smette di saltare quando tocca il bordo inferiore del canvas
-            this.velocityY = 0; // velocità verticale = 0, quando il giocatore tocca il bordo inferiore
-        }
+        
     }
     
-    
+    /*
     // Controllo della collisione con un oggetto rettangolare
     checkCollision(obstacle)
     {
@@ -47,6 +55,7 @@ class Player
             this.y + this.height > obstacle.y
         );
     }
+    */
 
     draw(ctx)
     {
